@@ -8,14 +8,14 @@ function ajouter_recherche()
 }
 
 function supprimer_recherche(e)
-{ 
+{
 
 
 }
 
 
 function selectionner_recherche(e)
-{ 
+{
 
 }
 
@@ -28,34 +28,34 @@ function init()
 
 function rechercher_nouvelles()
 {
-	
-	
+	$("#resultats").children().remove();
+	$("#wait").css("display", "block");
 }
 
 
 function maj_resultats(res)
 {
 
-	
+
 }
 
 
 function sauver_nouvelle(e)
 {
-	
+
 }
 
 
 function supprimer_nouvelle(e)
 {
-	
+
 }
 
 
 
 
 
-	
+
 
 
 
