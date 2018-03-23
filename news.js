@@ -51,9 +51,12 @@ function maj_resultats(res)
 }
 
 
-function sauver_nouvelle(e)
-{
+function sauver_nouvelle(e) {
+	var e = $(e);
+	e.find("img").attr("src", "disk15.jpg");
+	e.attr("onclick", "supprimer_nouvelle(this)");
 
+	var obj = {"titre"= }
 }
 
 
