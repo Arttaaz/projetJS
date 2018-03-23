@@ -8,7 +8,8 @@ function ajouter_recherche() {
 	var val = $("#zone_saisie").val();
 	if(recherches.indexOf(val) == -1) {
 		recherches.push(val);
-		$("#recherches-stockees").append("<p class=\"titre-recherche\"><label onclick=\"selectionner_recherche(this)\">" + val + "</label><img onclic=\"supprimer_recherche(this)\" src=\"croix30.jpg\" class=\"icone-croix\"/> </p>");
+		$("#recherches-stockees").append("<p class=\"titre-recherche\"><label onclick=\"selectionner_recherche(this)\">" +
+		val + "</label><img onclick=\"supprimer_recherche(this)\" src=\"croix30.jpg\" class=\"icone-croix\"/> </p>");
 	}
 }
 
