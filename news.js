@@ -4,6 +4,10 @@ var recherche_courante_news=[]; // tableau d'objets de type resultats (avec titr
 $(function() {
   if (localStorage.recherches) {
 		recherches = JSON.parse(localStorage.recherches);
+		for (var i = 0; i < recherches.length; i++) {
+			$("#recherches-stockees").append("<p class=\"titre-recherche\"><label onclick=\"selectionner_recherche(this)\">" +
+			recherches[i] + "</label><img onclick=\"supprimer_recherche(this)\" src=\"croix30.jpg\" class=\"icone-croix\"/> </p>");
+		}
 	}
 })
 function ajouter_recherche() {
