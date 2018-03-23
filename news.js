@@ -38,10 +38,6 @@ function selectionner_recherche(e) {
 
 function rechercher_nouvelles()
 {
-
-
-function rechercher_nouvelles()
-{
 	$("#resultats").children().remove();
 	$("#wait").css("display", "block");
 	var val = $("#zone_saisie").val();
