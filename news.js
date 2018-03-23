@@ -4,8 +4,7 @@ var recherche_courante_news=[]; // tableau d'objets de type resultats (avec titr
 $(function() {
 
 })
-function ajouter_recherche()
-{
+function ajouter_recherche() {
 	var val = $("#zone_saisie").val();
 	if(recherches.indexOf(val) == -1) {
 		recherches.push(val);
@@ -13,10 +12,11 @@ function ajouter_recherche()
 	}
 }
 
-function supprimer_recherche(e)
-{
-
-
+function supprimer_recherche(e) {
+	var val = $(e).prev().html();
+	var index = recherches.indexOf(val);
+	recherches.splice(index, 1);
+	$(e).parent().remove();
 }
 
 
