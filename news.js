@@ -65,15 +65,23 @@ function maj_resultats(res)
 	}
 }
 
-
-function sauver_nouvelle(e) {
-	var e = $(e);
-	e.find("img").attr("src", "disk15.jpg");
-	e.attr("onclick", "supprimer_nouvelle(this)");
-
+function get_nouvelle(e) {
+  var e = $(e);
 	var obj = { titre:e.parent().children(".titre_news").html(),
               date:e.parent().children(".date_news").html(),
               url:e.parent().children(".titre_news").attr("href") };
+  return obj;
+}
+
+
+function sauver_nouvelle(e) {
+
+  $(e).find("img").attr("src", "disk15.jpg");
+	$(e).attr("onclick", "supprimer_nouvelle(this)");
+
+  var obj = get_nouvelle(e);
+  obj = JSON.stringify(obj);
+
 
   if(recherche_courante_news.indexOf(obj) == -1) {
     recherche_courante_news.push(obj);
