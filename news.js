@@ -5,6 +5,10 @@ var recherche_courante_news=[]; // tableau d'objets de type resultats (avec titr
 $(function() {
   if (localStorage.recherches) {
 		recherches = JSON.parse(localStorage.recherches);
+		for (var i = 0; i < recherches.length; i++) {
+			$("#recherches-stockees").append("<p class=\"titre-recherche\"><label onclick=\"selectionner_recherche(this)\">" +
+			recherches[i] + "</label><img onclick=\"supprimer_recherche(this)\" src=\"croix30.jpg\" class=\"icone-croix\"/> </p>");
+		}
 	}
 })
 
@@ -24,7 +28,6 @@ function supprimer_recherche(e) {
 	recherches.splice(index, 1);
   localStorage.recherches = JSON.stringify(recherches);
 	$(e).parent().remove();
-
 }
 
 
@@ -37,21 +40,55 @@ function selectionner_recherche(e) {
 
 function rechercher_nouvelles()
 {
-
-
+	$("#resultats").children().remove();
+	$("#wait").css("display", "block");
+	var val = $("#zone_saisie").val();
+	val = encodeURI(val);
+	$.ajax("search.php?data="+val, {
+		success:maj_resultats,
+		method:"GET"
+	});
 }
 
 
 function maj_resultats(res)
 {
+	$("#wait").css("display", "none");
+	res = $.parseJSON(res);
 
+	for (var i = 0; i < res.length; i++) {
+		var tmp = res[i];
+		$("#resultats").append('<p class="titre_result"><a class="titre_news" '+
+				'href="' + tmp.url +' " target="_blank">'
+				+ decodeEntities(tmp.titre)+ '</a><span class="date_news">' +
+				format(tmp.date)+'</span>'+
+				'<span class="action_news" onclick="sauver_nouvelle(this)">'+
+				'<img src="horloge15.jpg"/></span></p>');
+	}
+}
 
+function get_nouvelle(e) {
+  var e = $(e);
+	var obj = { titre:e.parent().children(".titre_news").html(),
+              date:e.parent().children(".date_news").html(),
+              url:e.parent().children(".titre_news").attr("href") };
+  return obj;
 }
 
 
-function sauver_nouvelle(e)
-{
+function sauver_nouvelle(e) {
 
+  $(e).find("img").attr("src", "disk15.jpg");
+	$(e).attr("onclick", "supprimer_nouvelle(this)");
+
+  var obj = get_nouvelle(e);
+  obj = JSON.stringify(obj);
+
+
+  if(recherche_courante_news.indexOf(obj) == -1) {
+    recherche_courante_news.push(obj);
+    localStorage.recherche_courante_news = recherche_courante_news;
+  }
 }
 
 
