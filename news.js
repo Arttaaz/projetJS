@@ -41,6 +41,12 @@ function selectionner_recherche(e) {
 	var text = $(e).html();
 	$("#zone_saisie").val(text);
 	recherche_courante = text;
+
+	recherche_courante_news = JSON.parse(localStorage[recherche_courante]);
+	for (var i = 0; i < recherche_courante_news.length; i++) {
+		nouvTmp = recherche_courante_news[i];
+		addResult(nouvTmp.url, nouvTmp.titre, format(nouvTmp.date), "croix30.jpg", "sauver_nouvelle");
+	}
 }
 
 
@@ -49,6 +55,7 @@ function rechercher_nouvelles()
 	$("#resultats").children().remove();
 	$("#wait").css("display", "block");
 	var val = $("#zone_saisie").val();
+	recherche_courante = val;
 	val = encodeURI(val);
 	$.ajax("search.php?data="+val, {
 		success:maj_resultats,
@@ -56,6 +63,20 @@ function rechercher_nouvelles()
 	});
 }
 
+/**
+ * add a result ligne
+ * @date date formated !
+ * @param img : right image for delete/save
+ * @param onClick : function triggered when img is clicked
+ */
+function addResult(url, titre, date, img, onClick) {
+	$("#resultats").append('<p class="titre_result"><a class="titre_news" '+
+			'href="' + url +' " target="_blank">'
+			+ decodeEntities(titre)+ '</a><span class="date_news">' +
+			date +'</span>'+
+			'<span class="action_news" onclick="'+onClick+'(this)">'+
+			'<img src="'+img+'"/></span></p>');
+}
 
 function maj_resultats(res)
 {
@@ -64,12 +85,7 @@ function maj_resultats(res)
 
 	for (var i = 0; i < res.length; i++) {
 		var tmp = res[i];
-		$("#resultats").append('<p class="titre_result"><a class="titre_news" '+
-				'href="' + tmp.url +' " target="_blank">'
-				+ decodeEntities(tmp.titre)+ '</a><span class="date_news">' +
-				format(tmp.date)+'</span>'+
-				'<span class="action_news" onclick="sauver_nouvelle(this)">'+
-				'<img src="horloge15.jpg"/></span></p>');
+		addResult(tmp.url, tmp.titre, tmp.date, "horloge15.jpg", "sauver_nouvelle");
 	}
 }
 
@@ -97,7 +113,7 @@ function sauver_nouvelle(e) {
 
   if(recherche_courante_news.indexOf(obj) == -1) {
     recherche_courante_news.push(obj);
-    localStorage.recherche_courante_news = JSON.stringify(recherche_courante_news);
+    localStorage[recherche_courante] = JSON.stringify(recherche_courante_news);
     //$.cookie($("#zone_saisie").val(), JSON.stringify(recherche_courante_news), { expires:1000 } );
   }
 }
@@ -107,13 +123,11 @@ function supprimer_nouvelle(e) {
 	$(e).attr('onclick', 'sauver_nouvelle(this)');
 
 	var obj = get_nouvelle(e);
-  obj = JSON.stringify(obj);
-
 
 	var index = recherche_courante_news.indexOf(obj);
 	if (index != -1) {
 		recherche_courante_news.splice(index, 1);
-    localStorage.recherche_courante_news = recherche_courante_news;
+    localStorage[recherche_courante] = JSON.stringify(recherche_courante_news);
     //$.cookie($("#zone_saisie").val(), JSON.stringify(recherche_courante_news), { expires:1000 } );
 	}
 }
