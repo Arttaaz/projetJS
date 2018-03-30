@@ -2,8 +2,11 @@ var recherches=[];//tableau contenant des chaines de caracteres correspondant au
 var recherche_courante;// chaine de caracteres correspondant a la recherche courante
 var recherche_courante_news=[]; // tableau d'objets de type resultats (avec titre, date et url)
 $(function() {
-  if ($.cookie("recherches") != undefined) {
-		recherches = JSON.parse($.cookie("recherches"));
+
+  if (localStorage.recherches) {
+		recherches = JSON.parse(localStorage.recherches);
+  //if ($.cookie("recherches") != undefined) {
+	//	recherches = JSON.parse($.cookie("recherches"));
 		for (var i = 0; i < recherches.length; i++) {
 			$("#recherches-stockees").append("<p class=\"titre-recherche\"><label onclick=\"selectionner_recherche(this)\">" +
 			recherches[i] + "</label><img onclick=\"supprimer_recherche(this)\" src=\"croix30.jpg\" class=\"icone-croix\"/> </p>");
@@ -16,7 +19,8 @@ function ajouter_recherche() {
 		recherches.push(val);
 		$("#recherches-stockees").append("<p class=\"titre-recherche\"><label onclick=\"selectionner_recherche(this)\">" +
 		val + "</label><img onclick=\"supprimer_recherche(this)\" src=\"croix30.jpg\" class=\"icone-croix\"/> </p>");
-    $.cookie("recherches", JSON.stringify(recherches), { expires: 1000});
+    localStorage.recherches = JSON.stringify(recherches);
+    //$.cookie("recherches", JSON.stringify(recherches), { expires: 1000});
 	}
 }
 
@@ -24,8 +28,9 @@ function supprimer_recherche(e) {
 	var val = $(e).prev().html();
 	var index = recherches.indexOf(val);
 	recherches.splice(index, 1);
-  $.removeCookie("recherches");
-  $.cookie("recherches", JSON.stringify(recherches), { expires: 1000});
+  localStorage.recherches = JSON.stringify(recherches);
+  //$.removeCookie("recherches");
+  //$.cookie("recherches", JSON.stringify(recherches), { expires: 1000});
 	$(e).parent().remove();
 }
 
@@ -87,17 +92,15 @@ function sauver_nouvelle(e) {
 	$(e).attr("onclick", "supprimer_nouvelle(this)");
 
   var obj = get_nouvelle(e);
-  obj = JSON.stringify(obj);
-
 
   if(recherche_courante_news.indexOf(obj) == -1) {
     recherche_courante_news.push(obj);
-    $.cookie($("#zone_saisie").val(), JSON.stringify(recherche_courante_news), { expires:1000 } );
+    localStorage.recherche_courante_news = JSON.stringify(recherche_courante_news);
+    //$.cookie($("#zone_saisie").val(), JSON.stringify(recherche_courante_news), { expires:1000 } );
   }
 }
 
 
-function supprimer_nouvelle(e)
-{
+function supprimer_nouvelle(e) {
 
 }
