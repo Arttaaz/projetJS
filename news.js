@@ -114,5 +114,6 @@ function supprimer_nouvelle(e) {
 	if (index != -1) {
 		recherche_courante_news.splice(index, 1);
     localStorage.recherche_courante_news = recherche_courante_news;
+    //$.cookie($("#zone_saisie").val(), JSON.stringify(recherche_courante_news), { expires:1000 } );
 	}
 }
