@@ -1,11 +1,13 @@
 var recherches=[];//tableau contenant des chaines de caracteres correspondant aux recherches stockees
 var recherche_courante;// chaine de caracteres correspondant a la recherche courante
 var recherche_courante_news=[]; // tableau d'objets de type resultats (avec titre, date et url)
+
 $(function() {
   if (localStorage.recherches) {
 		recherches = JSON.parse(localStorage.recherches);
 	}
 })
+
 function ajouter_recherche() {
 	var val = $("#zone_saisie").val();
 	if(recherches.indexOf(val) == -1) {
@@ -55,5 +57,17 @@ function sauver_nouvelle(e)
 
 function supprimer_nouvelle(e)
 {
+	/*
+ <p class="titre_result">
+		<a class="titre_news" href="url " target="_blank">titre</a>
+		<span class="date_news">date</span>
+		<span class="action_news" onclick="sauver_nouvelle(this)">
+			< img src="horloge15.jpg"/>
+		</span>
+	</p>
+	*/
+	var p = $(e).parent();
+	p.find("img").attr('img', 'horloge15.jpg');
+	p.find(".action_nexs").attr('onclick', 'sauver_nouvelle(this)');
 
 }
