@@ -11,6 +11,10 @@ model.researchSelected = false;
 
 
 model.saveNouvelle = function (obj) {
+	if (model.recherches.indexOf(model.recherche_courante) == -1) {
+		ajouter_recherche(recherche_courante);
+	}
+
 	if (model.recherche_courante_news.indexOf(obj) == -1) {
 		model.recherche_courante_news.push(obj);
 		localStorage[model.recherche_courante] = JSON.stringify(model.recherche_courante_news);

@@ -58,8 +58,11 @@ function rechercher_nouvelles() {
 	});
 }
 
-function ajouter_recherche() {
-	var val = model.getZoneSaisie().val();
+function ajouter_recherche(val) {
+	if (val == undefined) {
+		val = model.getZoneSaisie().val();
+	}
+
 	if (model.recherches.indexOf(val) == -1) {
 		model.recherches.push(val);
 		$("#recherches-stockees").append("<p class=\"titre-recherche\"><label onclick=\"selectionner_recherche(this)\">" +
