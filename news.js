@@ -1,6 +1,7 @@
 var recherches=[];//tableau contenant des chaines de caracteres correspondant aux recherches stockees
 var recherche_courante;// chaine de caracteres correspondant a la recherche courante
 var recherche_courante_news=[]; // tableau d'objets de type resultats (avec titre, date et url)
+var researchSelected = false;
 
 $(function() {
 
@@ -30,6 +31,8 @@ function supprimer_recherche(e) {
 	var val = $(e).prev().html();
 	var index = recherches.indexOf(val);
 	recherches.splice(index, 1);
+	recherche_courante_news = [];
+	localStorage[val] = undefined;
   localStorage.recherches = JSON.stringify(recherches);
   //$.removeCookie("recherches");
   //$.cookie("recherches", JSON.stringify(recherches), { expires: 1000});
@@ -38,20 +41,23 @@ function supprimer_recherche(e) {
 
 
 function selectionner_recherche(e) {
+	researchSelected = true;
 	var text = $(e).html();
 	$("#zone_saisie").val(text);
 	recherche_courante = text;
 
+	$("#resultats").children().remove();
 	recherche_courante_news = JSON.parse(localStorage[recherche_courante]);
 	for (var i = 0; i < recherche_courante_news.length; i++) {
 		nouvTmp = recherche_courante_news[i];
-		addResult(nouvTmp.url, nouvTmp.titre, format(nouvTmp.date), "croix30.jpg", "sauver_nouvelle");
+		addResult(nouvTmp.url, nouvTmp.titre, nouvTmp.date, "croix30.jpg", "supprimer_nouvelle");
 	}
 }
 
 
 function rechercher_nouvelles()
 {
+	researchSelected = false;
 	$("#resultats").children().remove();
 	$("#wait").css("display", "block");
 	var val = $("#zone_saisie").val();
@@ -83,9 +89,22 @@ function maj_resultats(res)
 	$("#wait").css("display", "none");
 	res = $.parseJSON(res);
 
+	recherche_courante_news = [];
+	if (recherches.indexOf(recherche_courante) != -1) {
+		recherche_courante_news = JSON.parse(localStorage[recherche_courante]);
+	}
+
 	for (var i = 0; i < res.length; i++) {
 		var tmp = res[i];
-		addResult(tmp.url, tmp.titre, tmp.date, "horloge15.jpg", "sauver_nouvelle");
+		tmp.date = format(tmp.date);
+		var indSaved = recherche_courante_news.findIndex(function(element, index, array) {
+			return tmp.titre == element.titre && tmp.date == element.date;
+		})
+		if (indSaved == -1) {
+			addResult(tmp.url, tmp.titre, tmp.date, "horloge15.jpg", "sauver_nouvelle");
+		} else {
+			addResult(tmp.url, tmp.titre, tmp.date, "disk15.jpg", "supprimer_nouvelle");
+		}
 	}
 }
 
@@ -119,15 +138,21 @@ function sauver_nouvelle(e) {
 }
 
 function supprimer_nouvelle(e) {
-	$(e).find("img").attr('src', 'horloge15.jpg');
-	$(e).attr('onclick', 'sauver_nouvelle(this)');
-
 	var obj = get_nouvelle(e);
+	var index = recherche_courante_news.findIndex(function(element, index, array) {
+		return element.titre == obj.titre && element.date == obj.date;
+	})
 
-	var index = recherche_courante_news.indexOf(obj);
+	if (researchSelected) {
+		$("#resultats").children()[index].remove();
+	} else {
+		$(e).find("img").attr('src', 'horloge15.jpg');
+		$(e).attr('onclick', 'sauver_nouvelle(this)');
+	}
+
 	if (index != -1) {
 		recherche_courante_news.splice(index, 1);
-    localStorage[recherche_courante] = JSON.stringify(recherche_courante_news);
-    //$.cookie($("#zone_saisie").val(), JSON.stringify(recherche_courante_news), { expires:1000 } );
+		localStorage[recherche_courante] = JSON.stringify(recherche_courante_news);
+		//$.cookie($("#zone_saisie").val(), JSON.stringify(recherche_courante_news), { expires:1000 } );
 	}
 }
