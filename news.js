@@ -66,10 +66,16 @@ function maj_resultats(res)
 }
 
 function get_nouvelle(e) {
-  var e = $(e);
-	var obj = { titre:e.parent().children(".titre_news").html(),
-              date:e.parent().children(".date_news").html(),
-              url:e.parent().children(".titre_news").attr("href") };
+  if(typeof(e) == typeof("hey")) {
+    var obj = JSON.parse(e);
+  }
+  else {
+    var e = $(e);
+  	var obj = { titre:e.parent().children(".titre_news").html(),
+                date:e.parent().children(".date_news").html(),
+                url:e.parent().children(".titre_news").attr("href") };
+  }
+
   return obj;
 }
 
