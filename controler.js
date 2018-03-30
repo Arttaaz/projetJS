@@ -16,6 +16,11 @@ $(function() {
 			rechercher_nouvelles();
 		}
 	});
+
+	model.getZoneSaisie().autocomplete({
+		source: "getResearches.php",
+		minLength: 1
+	});
 })
 
 function sauver_nouvelle(e) {
@@ -64,7 +69,7 @@ function ajouter_recherche(val) {
 	}
 
 	if (model.recherches.indexOf(val) == -1) {
-		model.recherches.push(val);
+		model.addResearch(val);
 		$("#recherches-stockees").append("<p class=\"titre-recherche\"><label onclick=\"selectionner_recherche(this)\">" +
 			val + "</label><img onclick=\"supprimer_recherche(this)\" src=\"" + view.icons.remove + "\" class=\"icone-croix\"/> </p>");
 		localStorage.recherches = JSON.stringify(model.recherches);

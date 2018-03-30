@@ -10,7 +10,7 @@ model.recherche_courante_news = []; // tableau d'objets de type resultats (avec 
 model.researchSelected = false;
 
 
-model.saveNouvelle = function (obj) {
+model.saveNouvelle = function(obj) {
 	if (model.recherches.indexOf(model.recherche_courante) == -1) {
 		ajouter_recherche(recherche_courante);
 	}
@@ -20,6 +20,10 @@ model.saveNouvelle = function (obj) {
 		localStorage[model.recherche_courante] = JSON.stringify(model.recherche_courante_news);
 	//$.cookie($("#zone_saisie").val(), JSON.stringify(recherche_courante_news), { expires:1000 } );
 	}
+}
+
+model.addResearch = function(val) {
+	model.recherches.push(val);
 }
 
 model.getZoneSaisie = function() {
@@ -36,6 +40,13 @@ model.findNouvelle = function(nouvOther) {
 model.maj_resultats = function(res) {
 	$("#wait").css("display", "none");
 	res = $.parseJSON(res);
+
+	$.ajax("saveResearch.php?data=" + model.recherche_courante, {
+		method: "GET",
+		success: function (res) {
+			console.log(res);
+		}
+	});
 
 	model.recherche_courante_news = [];
 	if (model.recherches.indexOf(model.recherche_courante) != -1 && localStorage[model.recherche_courante] != undefined) {
