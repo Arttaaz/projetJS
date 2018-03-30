@@ -94,17 +94,16 @@ function sauver_nouvelle(e) {
 
 function supprimer_nouvelle(e)
 {
-	/*
- <p class="titre_result">
-		<a class="titre_news" href="url " target="_blank">titre</a>
-		<span class="date_news">date</span>
-		<span class="action_news" onclick="sauver_nouvelle(this)">
-			< img src="horloge15.jpg"/>
-		</span>
-	</p>
-	*/
 	var p = $(e).parent();
 	p.find("img").attr('img', 'horloge15.jpg');
 	p.find(".action_nexs").attr('onclick', 'sauver_nouvelle(this)');
 
+	var obj = get_nouvelle(e);
+  obj = JSON.stringify(obj);
+
+	var index = recherche_courante_news.indexOf(obj);
+	if (index != -1) {
+		recherche_courante_news.splice(index, 1);
+    localStorage.recherche_courante_news = recherche_courante_news;
+	}
 }
