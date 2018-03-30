@@ -101,7 +101,7 @@ function sauver_nouvelle(e) {
 function supprimer_nouvelle(e)
 {
 	console.log(e);
-	$(e).find("img").attr('img', 'horloge15.jpg');
+	$(e).find("img").attr('src', 'horloge15.jpg');
 	$(e).attr('onclick', 'sauver_nouvelle(this)');
 
 	var obj = get_nouvelle(e);
