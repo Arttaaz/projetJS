@@ -2,8 +2,8 @@ var recherches=[];//tableau contenant des chaines de caracteres correspondant au
 var recherche_courante;// chaine de caracteres correspondant a la recherche courante
 var recherche_courante_news=[]; // tableau d'objets de type resultats (avec titre, date et url)
 $(function() {
-  if (localStorage.recherches) {
-		recherches = JSON.parse(localStorage.recherches);
+  if ($.cookie("recherches") != undefined) {
+		recherches = JSON.parse($.cookie("recherches"));
 		for (var i = 0; i < recherches.length; i++) {
 			$("#recherches-stockees").append("<p class=\"titre-recherche\"><label onclick=\"selectionner_recherche(this)\">" +
 			recherches[i] + "</label><img onclick=\"supprimer_recherche(this)\" src=\"croix30.jpg\" class=\"icone-croix\"/> </p>");
@@ -16,7 +16,7 @@ function ajouter_recherche() {
 		recherches.push(val);
 		$("#recherches-stockees").append("<p class=\"titre-recherche\"><label onclick=\"selectionner_recherche(this)\">" +
 		val + "</label><img onclick=\"supprimer_recherche(this)\" src=\"croix30.jpg\" class=\"icone-croix\"/> </p>");
-    localStorage.recherches = JSON.stringify(recherches);
+    $.cookie("recherches", JSON.stringify(recherches), { expires: 1000});
 	}
 }
 
@@ -24,7 +24,8 @@ function supprimer_recherche(e) {
 	var val = $(e).prev().html();
 	var index = recherches.indexOf(val);
 	recherches.splice(index, 1);
-  localStorage.recherches = JSON.stringify(recherches);
+  $.removeCookie("recherches");
+  $.cookie("recherches", JSON.stringify(recherches), { expires: 1000});
 	$(e).parent().remove();
 }
 
@@ -66,17 +67,17 @@ function maj_resultats(res)
 }
 
 function get_nouvelle(e) {
-  if(typeof(e) == typeof("hey")) {
+  if(typeof(e) == typeof("hey")) {    //si e est un objet JSON qui a été stringify
     var obj = JSON.parse(e);
   }
-  else {
+  else {                             //sinon e est un DOM element
     var e = $(e);
   	var obj = { titre:e.parent().children(".titre_news").html(),
                 date:e.parent().children(".date_news").html(),
                 url:e.parent().children(".titre_news").attr("href") };
   }
 
-  return obj;
+  return obj;                        //renvoie la nouvelle sous forme d'objet js
 }
 
 
@@ -91,7 +92,7 @@ function sauver_nouvelle(e) {
 
   if(recherche_courante_news.indexOf(obj) == -1) {
     recherche_courante_news.push(obj);
-    localStorage.recherche_courante_news = recherche_courante_news;
+    $.cookie($("#zone_saisie").val(), JSON.stringify(recherche_courante_news), { expires:1000 } );
   }
 }
 
