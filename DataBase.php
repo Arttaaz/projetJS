@@ -10,6 +10,7 @@ class DataBase extends SQLite3
 
     private function createResearch(string $res)
     {
+        $res = strtolower($res);
         $pre = $this->prepare('insert into researches values(:res, :weight)');
         $pre->bindValue(':res', $res, SQLITE3_TEXT);
         $pre->bindValue(':weight', 1, SQLITE3_INTEGER);
@@ -18,6 +19,7 @@ class DataBase extends SQLite3
 
     function addResearch(string $res)
     {
+        $res = strtolower($res);
         if (! $this->exist($res)) {
             $this->createResearch($res);
         } else {
@@ -30,6 +32,7 @@ class DataBase extends SQLite3
 
     function exist(string $res): bool
     {
+        $res = strtolower($res);
         $pre = $this->prepare('select count(*) from researches where name=:res');
         $pre->bindValue(':res', $res, SQLITE3_TEXT);
         $result = $pre->execute();
@@ -38,6 +41,7 @@ class DataBase extends SQLite3
 
     function getWeight(string $res): int
     {
+        $res = strtolower($res);
         $pre = $this->prepare('select weight from researches where name=:res');
         $pre->bindValue(':res', $res, SQLITE3_TEXT);
         $result = $pre->execute();
@@ -48,6 +52,7 @@ class DataBase extends SQLite3
 
     function getByWeight(string $term)
     {
+        $res = strtolower($term);
         $pre = $this->prepare("select name from researches where name like :term order by weight desc");
         $pre->bindValue(':term', $term . "%", SQLITE3_TEXT);
         $result = $pre->execute();

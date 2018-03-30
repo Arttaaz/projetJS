@@ -9,6 +9,5 @@ $bd = new DataBase();
 $bd->addResearch($research);
 
 echo "good";
-echo json_encode($bd->getByWeight(""));
 
 ?>
