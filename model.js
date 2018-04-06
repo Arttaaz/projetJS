@@ -12,7 +12,7 @@ model.researchSelected = false;
 
 model.saveNouvelle = function(obj) {
 	if (model.recherches.indexOf(model.recherche_courante) == -1) {
-		ajouter_recherche(recherche_courante);
+		ajouter_recherche(model.recherche_courante);
 	}
 
 	if (model.recherche_courante_news.indexOf(obj) == -1) {
